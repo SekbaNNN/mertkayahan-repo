@@ -1,6 +1,6 @@
 # mertkayahan-repo
  Akbank Makine Öğrenmesine Giriş Bootcamp Final Projesi
- deneme 
+ 
 # Heart Disease Prediction
 
 ## İçindekiler
@@ -13,7 +13,7 @@
 - [Seçilen Model ve Sonuçlar](#seçilen-model-ve-sonuçlar)  
 - [Gerçek Dünyada Kullanım Senaryoları](#gerçek-dünyada-kullanım-senaryoları)  
 - [Gelecek Geliştirmeler](#gelecek-geliştirmeler)  
-- [Kurulum ve Çalıştırma](#kurulum-ve-çalıştırma)  
+ 
 
 ---
 
@@ -66,4 +66,58 @@ Grafikler ve barplot’larla her kategoride kalp hastalığı oranını analiz e
 
 ## Dengesiz Veriyle Mücadele
 - Eğitim seti: `train_test_split(stratify=y)` ile %70–30 oranında bölündü.  
-- Doğrudan sınıf oranı:  
+- Doğrudan sınıf oranı:
+False (sağlıklı): ~198.246
+True (hasta) : ~ 18.333
+- **SMOTE** ile eğitim setini %50–50’e dengeledim:  
+False: 198.246 → 198.246
+True : 18.333 → 198.246
+
+---
+
+## Model Eğitimi ve Karşılaştırma
+Dört algoritmayı aynı veri seti üzerinde deneyip karşılaştırdım:
+
+| Model               | Precision (True) | Recall (True) | F1-Score (True) | Accuracy |
+|---------------------|------------------|---------------|-----------------|----------|
+| Decision Tree       | 0.533            | 0.062         | 0.111           | 0.916    |
+| Random Forest       | 0.593            | 0.047         | 0.088           | 0.917    |
+| XGBoost             | 0.518            | 0.096         | 0.162           | 0.916    |
+| **Balanced RF**     | **0.226**        | **0.770**     | **0.350**       | 0.757    |
+
+- Diğer algoritmalar, azınlık sınıf (“hasta”) vakalarını neredeyse gözardı ederken  
+- **BalancedRandomForestClassifier** en iyi F1-score’u (0.350) ve yüksek recall’u (%77) sağladı.
+
+---
+
+## Seçilen Model ve Sonuçlar
+- **Model**: Balanced Random Forest  
+- **Hiperparametreler**:  
+```python
+n_estimators=100  
+max_depth=10  
+random_state=42  
+n_jobs=-1  
+
+## Threshold Optimizasyonu:
+- Varsayılan eşik (0.5) ile F1 = 0.286
+- Eşik taraması → en iyi F1 = 0.397 @ threshold = 0.7
+- Nihai Performans (threshold=0.7):
+Precision: 0.328  
+Recall:    0.503  
+F1-Score:  0.397  
+Accuracy:  0.857  
+Seçim Gerekçesi:
+- Yüksek recall (%50 üzeri) ile hastaları kaçırmama önceliği
+- En yüksek F1 dengesi
+
+## Gerçek Dünyada Kullanım Senaryoları
+- Hastane/klinik ön taraması: Risk altındaki bireyleri erken tespit edip ileri tetkikleri planlama.
+- Sağlık sigortası: Maliyet optimizasyonu için yüksek riskli müşterilere yönelik önleyici programlar.
+- Kişisel sağlık uygulamaları: Kullanıcılara yaşam tarzı önerileri sunarak kalp sağlığı takibi.
+
+## Gelecek Geliştirmeler
+- Farklı dengeleme yöntemleri
+- Derin öğrenme
+- Canlı sistem entegrasyonu:
+- REST API ile gerçek zamanlı tahmin servisleri
