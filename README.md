@@ -19,7 +19,7 @@
 ---
 
 ## Kaggle Linki
-https://www.kaggle.com/code/mertkayahan/supervised
+https://www.kaggle.com/code/mertkayahan/akbank-bootcamp
 
 ## Proje Özeti
 Bu projede, **“Heart Disease”** veri setini kullanarak bireylerin kalp hastalığı geçirme riskini tahmin ediyorum. Amacım:
